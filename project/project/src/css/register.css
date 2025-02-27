@@ -1,0 +1,15 @@
+.register-container {
+    background-image: url('./images/7.png'); /* הכנס את הנתיב לתמונה שלך */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+    background-color: rgba(255, 255, 255, 0.7); /* צבע רקע שקוף להדר */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
