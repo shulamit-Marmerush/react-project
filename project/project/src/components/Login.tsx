@@ -13,6 +13,7 @@ export default function Login() {
                 'Content-Type': 'application/json',
             };
             const response = await axios.post<User>('http://localhost:8080/api/user/login', user, { headers });
+            alert("User logged in successfully!");
             return response; // החזר את התגובה
         } catch (error) {
             console.error("Login error:", error);

@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 
 const validationSchema = object({
     UserName: string().required("Username is required").max(20, "Username cannot be more than 20 characters"),
-    Lastname: string().required("Lastname is required").max(20, "Lastname cannot be more than 20 characters"),
+    Name: string().required("Lastname is required").max(20, "Lastname cannot be more than 20 characters"),
     Password: string().required("Password is required").min(6, "Password must be at least 6 characters"),
     Phone: string().required("Phone is required"),
     Email: string().required("Email is required").email("Email is not valid"),
@@ -52,7 +52,7 @@ export default function Register() {
     const classes = useStyles();
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>({
-        resolver: yupResolver(validationSchema),
+        // resolver: yupResolver(validationSchema),
     });
     const { setMyUser } = useUserContext();    
 
@@ -70,16 +70,26 @@ export default function Register() {
 
     const registerUser = async (user: User) => {
         try {
-            const response = await axios.post<User>('http://localhost:8080/api/user/signin', user, {
+            const response = await axios.post<User>('http://localhost:8080/api/user/sighin', user, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
+            alert("User registered successfully!");
             return response.data;
         } catch (error) {
+            // בדוק אם השגיאה מכילה תגובה מהשרת
+            if (axios.isAxiosError(error) && error.response) {
+                // הצג את הודעת השגיאה מהשרת
+                alert(`Error: ${error.response.data}`); // או כל הודעה אחרת שתרצה
+            } else {
+                // במקרה של שגיאה אחרת
+                alert("Error registering user. Please try again.");
+            }
             console.error(error);
         }
     };
+    
 
     return (
         <Layout>
@@ -99,13 +109,13 @@ export default function Register() {
                             helperText={errors.UserName ? errors.UserName.message : ''}
                         />
                         <TextField 
-                            {...register("Lastname")} 
-                            label="Lastname" 
+                            {...register("Name")} 
+                            label="Name" 
                             variant="outlined" 
                             fullWidth 
                             margin="normal" 
-                            error={!!errors.Lastname}
-                            helperText={errors.Lastname ? errors.Lastname.message : ''}
+                            error={!!errors.Name}
+                            helperText={errors.Name ? errors.Name.message : ''}
                         />
                         <TextField 
                             type="password" 

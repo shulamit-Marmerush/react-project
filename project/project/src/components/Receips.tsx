@@ -190,7 +190,7 @@ const Receips = () => {
     }, [selectedCategory, duration, searchTerm, recipes]);
 
     const handleEdit = (id: number, userid: number) => {
-        if (userid !== user?.id) {
+        if (userid !== user?.Id) {
             alert("אין לך הרשאות לערוך מתכון זה.");
             return;
         }
@@ -198,7 +198,7 @@ const Receips = () => {
     };
 
     const handleDelete = async (id: number, userid: number) => {
-        if (userid !== user?.id) {
+        if (userid !== user?.Id) {
             alert("אין לך הרשאות למחוק מתכון זה.");
             return;
         }

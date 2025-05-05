@@ -327,7 +327,8 @@
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-
+import { useUserContext } from './UserContext';
+ 
 // הגדרת ממשק עבור הנתונים
 interface RecipeForm {
     Name: string;
@@ -350,6 +351,8 @@ interface RecipeForm {
 }
 
 const AddRecipe = () => {
+    const { user } = useUserContext();
+
     const navigate = useNavigate();
     const { register, handleSubmit, control } = useForm<RecipeForm>();
     const { fields: ingredients, append: appendIngredient } = useFieldArray({
@@ -378,18 +381,26 @@ const AddRecipe = () => {
                 Id: instruction.id,
                 Name: instruction.Name,
             })),
-            // UserId: data.UserId || 1, // הוספת UserId
-            // CategoryId: data.CategoryId, // הוספת CategoryId
+            UserId: user?.Id, // הוספת UserId
+            CategoryId: data.CategoryId, // הוספת CategoryId
         };
-
         try {
-    await axios.post(`http://localhost:8080/api/recipe`, recipeData);
-            console.log('Recipe added successfully!');
+            const response = await axios.post(`http://localhost:8080/api/recipe`, recipeData);
+            console.log('Recipe added successfully!', response.data);
             navigate("/recipes");
         } catch (error) {
-            console.error('Error adding recipe:', error);
+            if (axios.isAxiosError(error)) {
+                // טיפול בשגיאות של Axios
+                console.error('Error adding recipe:', error.response?.data || error.message);
+                alert(`Error: ${error.response?.data?.message || 'Something went wrong'}`);
+            } else {
+                // טיפול בשגיאות אחרות
+                console.error('Unexpected error:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            }
         }
     };
+
 
     return (
         <div>
